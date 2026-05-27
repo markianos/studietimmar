@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studietimmar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #2d6cdf;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1f57b8;
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 16px;
+      background: #eef4ff;
+      border-radius: 8px;
+    }
+
+    .small {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .main-result {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Beräkna studietimmar</h1>
+    <p class="small">En studietimme = 45 minuter</p>
+
+    <label for="starttid">Starttid</label>
+    <input type="time" id="starttid" />
+
+    <label for="sluttid">Sluttid</label>
+    <input type="time" id="sluttid" />
+
+    <button onclick="raknaUt()">Räkna ut</button>
+
+    <div class="result" id="resultat">
+      Fyll i tider och klicka på "Räkna ut".
+    </div>
+  </div>
+
+  <script>
+    function raknaUt() {
+      const start = document.getElementById("starttid").value;
+      const slut = document.getElementById("sluttid").value;
+      const resultat = document.getElementById("resultat");
+
+      if (!start || !slut) {
+        resultat.innerHTML = "Du måste fylla i både starttid och sluttid.";
+        return;
+      }
+
+      const [startH, startM] = start.split(":").map(Number);
+      const [slutH, slutM] = slut.split(":").map(Number);
+
+      const startMin = startH * 60 + startM;
+      const slutMin = slutH * 60 + slutM;
+
+      const diff = slutMin - startMin;
+
+      if (diff < 0) {
+        resultat.innerHTML = "Sluttiden måste vara senare än starttiden.";
+        return;
+      }
+
+      const exaktaStudietimmar = diff / 45;
+      const helaStudietimmar = Math.floor(exaktaStudietimmar);
+
+      resultat.innerHTML = `
+        <div class="main-result"><strong>Hela studietimmar:</strong> ${helaStudietimmar}</div>
+        <div><strong>Exakt tid:</strong> ${exaktaStudietimmar.toFixed(2)} studietimmar</div>
+        <div class="small"><strong>Total tid i minuter:</strong> ${diff} min</div>
+      `;
+    }
+  </script>
+</body>
+</html>
